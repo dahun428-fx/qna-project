@@ -6,51 +6,51 @@ CREATE TABLE ec_approve_auth_key
   approve_id INT      NOT NULL COMMENT '요청처리ID'
 );
 
-CREATE TABLE ec_approvement_type
+CREATE TABLE ec_approvement
 (
-  approve_type      INT  NOT NULL COMMENT '승인요청타입',
-  approve_type_name CHAR NOT NULL COMMENT '승인요청타입이름',
-  seq               INT  NOT NULL COMMENT '정렬순서',
-  use_yn            CHAR NOT NULL DEFAULT 'Y' COMMENT '사용여부',
-  PRIMARY KEY (approve_type)
+  approve_id      INT          NOT NULL COMMENT '요청처리ID',
+  approve_comment LONGTEXT     NULL     DEFAULT '' COMMENT '승인/반려의견',
+  qna_id          INT          NOT NULL COMMENT '문의 ID',
+  approve_date    TIMESTAMP    NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '요청처리일자',
+  approve_state   INT          NULL     DEFAULT 0 COMMENT '요청처리상태',
+  user_id         VARCHAR(100) NOT NULL COMMENT '유저ID',
+  req_date        TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '요청일자',
+  approve_type    INT          NOT NULL COMMENT '승인요청타입',
+  PRIMARY KEY (approve_id)
 );
 
-CREATE TABLE ec_approvemnt
+CREATE TABLE ec_approvement_type
 (
-  approve_id      INT       NOT NULL COMMENT '요청처리ID',
-  approve_comment LONGTEXT  NULL     DEFAULT '' COMMENT '승인/반려의견',
-  qna_id          INT       NOT NULL COMMENT '문의 ID',
-  approve_date    TIMESTAMP NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '요청처리일자',
-  approve_state   INT       NULL     DEFAULT 0 COMMENT '요청처리상태',
-  user_id         CHAR      NOT NULL COMMENT '유저ID',
-  req_date        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '요청일자',
-  approve_type    INT       NOT NULL COMMENT '승인요청타입',
-  PRIMARY KEY (approve_id)
+  approve_type      INT          NOT NULL COMMENT '승인요청타입',
+  approve_type_name VARCHAR(100) NOT NULL COMMENT '승인요청타입이름',
+  seq               INT          NOT NULL COMMENT '정렬순서',
+  use_yn            CHAR         NOT NULL DEFAULT 'Y' COMMENT '사용여부',
+  PRIMARY KEY (approve_type)
 );
 
 CREATE TABLE ec_brand
 (
-  brand_code CHAR     NOT NULL COMMENT '브랜드코드',
-  brand_name LONGTEXT NOT NULL COMMENT '브랜드명',
+  brand_code VARCHAR(100) NOT NULL COMMENT '브랜드코드',
+  brand_name LONGTEXT     NOT NULL COMMENT '브랜드명',
   PRIMARY KEY (brand_code)
 );
 
 CREATE TABLE ec_category
 (
-  category_code CHAR     NOT NULL COMMENT '카테고리코드',
-  category_name LONGTEXT NOT NULL COMMENT '카테고리명',
+  category_code VARCHAR(100) NOT NULL COMMENT '카테고리코드',
+  category_name LONGTEXT     NOT NULL COMMENT '카테고리명',
   PRIMARY KEY (category_code)
 );
 
 CREATE TABLE ec_code
 (
-  sn           INT      NOT NULL AUTO_INCREMENT COMMENT '일련번호',
-  code_name    CHAR     NULL     COMMENT '코드',
-  seq          INT      NULL     COMMENT '정렬순서',
-  code_content CHAR     NULL     COMMENT '내용',
-  use_yn       CHAR     NOT NULL DEFAULT 'Y' COMMENT '사용여부',
-  remark       LONGTEXT NULL     COMMENT '비고',
-  group_code   CHAR     NOT NULL COMMENT '그룹코드',
+  sn           INT          NULL     AUTO_INCREMENT COMMENT '일련번호',
+  code_name    VARCHAR(100) NULL     COMMENT '코드',
+  seq          INT          NULL     COMMENT '정렬순서',
+  code_content LONGTEXT     NULL     COMMENT '내용',
+  use_yn       CHAR         NOT NULL DEFAULT 'Y' COMMENT '사용여부',
+  remark       LONGTEXT     NULL     COMMENT '비고',
+  group_code   VARCHAR(100) NOT NULL COMMENT '그룹코드',
   PRIMARY KEY (sn)
 );
 
@@ -61,27 +61,20 @@ CREATE TABLE ec_config
   blind_approve_mode INT NOT NULL DEFAULT 1 COMMENT '비공개승인모드'
 );
 
-CREATE TABLE ec_contact
-(
-  contact_id   INT  NOT NULL COMMENT '관련부서ID',
-  contact_name CHAR NULL     COMMENT '관련부서이름',
-  PRIMARY KEY (contact_id)
-);
-
 CREATE TABLE ec_group_code
 (
-  group_code CHAR      NOT NULL COMMENT '그룹코드',
-  group_name CHAR      NULL     COMMENT '그룹명',
-  remark     LONGTEXT  NULL     COMMENT '비고',
-  reg_date   TIMESTAMP NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '등록일자',
-  user_id    CHAR      NOT NULL COMMENT '유저ID',
+  group_code VARCHAR(100) NOT NULL COMMENT '그룹코드',
+  group_name VARCHAR(100) NULL     COMMENT '그룹명',
+  remark     LONGTEXT     NULL     COMMENT '비고',
+  reg_date   TIMESTAMP    NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '등록일자',
+  user_id    VARCHAR(100) NOT NULL COMMENT '유저ID',
   PRIMARY KEY (group_code)
 );
 
 CREATE TABLE ec_misumi_comment
 (
   misumi_comment      LONGTEXT  NULL     DEFAULT '' COMMENT '미스미답변',
-  misumi_comment_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '미스미답변일자',
+  misumi_comment_date TIMESTAMP NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '미스미답변일자',
   qna_id              INT       NOT NULL COMMENT '문의 ID',
   misumi_comment_id   INT       NOT NULL AUTO_INCREMENT COMMENT '미스미답변ID',
   PRIMARY KEY (misumi_comment_id)
@@ -89,27 +82,27 @@ CREATE TABLE ec_misumi_comment
 
 CREATE TABLE ec_notice
 (
-  sn       INT       NOT NULL AUTO_INCREMENT COMMENT '공지사항일련번호',
-  reg_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '공지사항등록일자',
-  title    LONGTEXT  NULL     DEFAULT '' COMMENT '공지사항제목',
-  content  LONGTEXT  NULL     DEFAULT '' COMMENT '공지사항내용',
-  user_id  CHAR      NOT NULL COMMENT '유저ID',
+  sn       INT          NOT NULL AUTO_INCREMENT COMMENT '공지사항일련번호',
+  reg_date TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '공지사항등록일자',
+  title    LONGTEXT     NULL     DEFAULT '' COMMENT '공지사항제목',
+  content  LONGTEXT     NULL     DEFAULT '' COMMENT '공지사항내용',
+  user_id  VARCHAR(100) NOT NULL COMMENT '유저ID',
   PRIMARY KEY (sn)
 );
 
 CREATE TABLE ec_qna
 (
-  qna_id          INT       NOT NULL AUTO_INCREMENT COMMENT '문의 ID',
-  title           CHAR      NOT NULL COMMENT '문의 제목',
-  content         LONGTEXT  NOT NULL COMMENT '문의 내용',
-  part_no         LONGTEXT  NOT NULL COMMENT '형번',
-  reg_id          CHAR      NOT NULL COMMENT '문의등록자ID',
-  series_code     CHAR      NOT NULL COMMENT '시리즈코드',
-  contact_id      INT       NOT NULL COMMENT '관련부서ID',
-  isDeleted       CHAR      NULL     DEFAULT 'N' COMMENT '삭제여부',
-  deleted_user_id CHAR      NULL     COMMENT '삭제한유저ID',
-  deleted_date    TIMESTAMP NULL     COMMENT '삭제한일자',
-  isBlind         CHAR      NULL     DEFAULT 'N' COMMENT '블라인드여부',
+  qna_id          INT          NOT NULL AUTO_INCREMENT COMMENT '문의 ID',
+  title           LONGTEXT     NOT NULL COMMENT '문의 제목',
+  content         LONGTEXT     NOT NULL COMMENT '문의 내용',
+  reg_id          VARCHAR(100) NOT NULL COMMENT '문의등록자ID',
+  part_no         VARCHAR(100) NOT NULL COMMENT '형번',
+  series_code     VARCHAR(100) NOT NULL COMMENT '시리즈코드',
+  contact_id      INT          NULL     COMMENT '관련부서ID',
+  isDeleted       CHAR         NULL     DEFAULT 'N' COMMENT '삭제여부',
+  deleted_user_id VARCHAR(100) NULL     COMMENT '삭제한유저ID',
+  deleted_date    TIMESTAMP    NULL     COMMENT '삭제한일자',
+  isBlind         CHAR         NULL     DEFAULT 'N' COMMENT '비공개여부',
   PRIMARY KEY (qna_id)
 );
 
@@ -123,138 +116,126 @@ CREATE TABLE ec_qna_alert
 CREATE TABLE ec_qna_blind
 (
   blind_id     INT      NOT NULL AUTO_INCREMENT COMMENT '비공개ID',
-  blind_reason LONGTEXT NULL     DEFAULT '' COMMENT '비공개사유',
-  blind_flag   CHAR     NOT NULL DEFAULT '0' COMMENT '투고표시대상',
+  blind_reason LONGTEXT NULL     COMMENT '비공개사유',
+  blind_flag   CHAR     NULL     COMMENT '투고표시대상',
   qna_id       INT      NOT NULL COMMENT '문의 ID',
   PRIMARY KEY (blind_id)
 );
 
 CREATE TABLE ec_qna_proc
 (
-  proc_id      INT       NOT NULL AUTO_INCREMENT COMMENT '문의처리일련번호',
-  proc_date    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '문의처리일자',
-  qna_id       INT       NOT NULL COMMENT '문의 ID',
-  user_id      CHAR      NOT NULL COMMENT '유저ID',
-  proc_content LONGTEXT  NULL     COMMENT '문의처리내용',
-  memo         LONGTEXT  NULL     COMMENT '메모',
-  proc_type    INT       NOT NULL COMMENT '문의처리종류번호',
+  proc_id      INT          NOT NULL COMMENT '문의처리일련번호',
+  proc_date    TIMESTAMP    NULL     COMMENT '문의처리일자',
+  qna_id       INT          NOT NULL COMMENT '문의 ID',
+  user_id      VARCHAR(100) NOT NULL COMMENT '유저ID',
+  proc_content LONGTEXT     NULL     COMMENT '문의처리내용',
+  memo         LONGTEXT     NULL     COMMENT '메모',
+  proc_type    INT          NOT NULL COMMENT '문의처리종류번호',
   PRIMARY KEY (proc_id)
 );
 
 CREATE TABLE ec_qna_proc_type
 (
-  proc_type      INT  NOT NULL COMMENT '문의처리종류번호',
-  proc_type_name CHAR NULL     COMMENT '문의처리종류이름',
+  proc_type      INT          NOT NULL COMMENT '문의처리종류번호',
+  proc_type_name VARCHAR(100) NOT NULL COMMENT '문의처리종류이름',
   PRIMARY KEY (proc_type)
 );
 
 CREATE TABLE ec_qna_recommend
 (
-  rcmd_id     INT       NOT NULL COMMENT '추천ID',
-  rcmd_date   TIMESTAMP NOT NULL COMMENT '추천일자',
-  qna_id      INT       NOT NULL COMMENT '문의 ID',
-  rcmd_reg_id CHAR      NOT NULL COMMENT '문의추천자ID',
+  rcmd_id     INT          NOT NULL COMMENT '추천ID',
+  rcmd_date   TIMESTAMP    NULL     COMMENT '추천일자',
+  rcmd_reg_id VARCHAR(100) NULL     COMMENT '문의추천자ID',
+  qna_id      INT          NOT NULL COMMENT '문의 ID',
   PRIMARY KEY (rcmd_id)
 );
 
 CREATE TABLE ec_qna_report
 (
-  qna_report_id  INT       NOT NULL COMMENT '문의신고일련번호',
-  report_date    TIMESTAMP NULL     COMMENT '문의신고등록일자',
-  report_type    CHAR      NULL     COMMENT '문의신고종류',
-  report_content LONGTEXT  NULL     COMMENT '문의신고내용',
-  qna_id         INT       NOT NULL COMMENT '문의 ID',
-  report_reg_id  CHAR      NOT NULL COMMENT '문의신고자ID',
-  report_state   INT       NULL     COMMENT '문의신고상태',
+  qna_report_id  INT          NOT NULL COMMENT '문의신고일련번호',
+  report_date    TIMESTAMP    NULL     COMMENT '문의신고등록일자',
+  report_type    CHAR         NULL     COMMENT '문의신고종류',
+  report_content LONGTEXT     NULL     COMMENT '문의신고내용',
+  qna_id         INT          NOT NULL COMMENT '문의 ID',
+  report_reg_id  VARCHAR(100) NOT NULL COMMENT '문의신고자ID',
+  report_state   INT          NULL     COMMENT '문의신고상태',
   PRIMARY KEY (qna_report_id)
 );
 
 CREATE TABLE ec_qna_report_proc
 (
-  report_proc_id      INT       NOT NULL COMMENT '신고처리ID',
-  qna_report_id       INT       NOT NULL COMMENT '문의신고일련번호',
-  report_proc_content LONGTEXT  NULL     COMMENT '신고처리결과내용',
-  report_proc_date    TIMESTAMP NULL     COMMENT '신고처리등록일자',
-  user_id             CHAR      NOT NULL COMMENT '유저ID',
-  proc_type           INT       NOT NULL COMMENT '문의처리종류번호',
+  report_proc_id      INT          NOT NULL COMMENT '신고처리ID',
+  qna_report_id       INT          NOT NULL COMMENT '문의신고일련번호',
+  report_proc_content LONGTEXT     NULL     COMMENT '신고처리결과내용',
+  report_proc_date    TIMESTAMP    NULL     COMMENT '신고처리등록일자',
+  user_id             VARCHAR(100) NOT NULL COMMENT '유저ID',
+  proc_type           INT          NOT NULL COMMENT '문의처리종류번호',
   PRIMARY KEY (report_proc_id)
 );
 
 CREATE TABLE ec_rcmd_cnt
 (
-  rcmd_cnt    INT  NULL     COMMENT '추천건수',
-  rcmd_reg_id CHAR NOT NULL COMMENT '문의추천자ID'
-);
-
-CREATE TABLE ec_rcmd_reg
-(
-  rcmd_reg_id      CHAR      NOT NULL COMMENT '문의추천자ID',
-  rcmd_reg_name    CHAR      NULL     COMMENT '문의추천자이름',
-  rcmd_reg_code    CHAR      NULL     COMMENT '문의추천자코드',
-  rcmd_reg_tel     CHAR      NULL     COMMENT '문의추천자전화번호',
-  rcmd_reg_email   CHAR      NULL     COMMENT '문의추천자이메일',
-  rcmd_reg_company CHAR      NULL     COMMENT '문의추천자회사',
-  rcmd_reg_date    TIMESTAMP NULL     COMMENT '문의추천일자',
-  PRIMARY KEY (rcmd_reg_id)
+  rcmd_cnt INT NULL     DEFAULT 0 COMMENT '추천건수',
+  qna_id   INT NOT NULL COMMENT '문의 ID'
 );
 
 CREATE TABLE ec_reg
 (
-  reg_id      CHAR      NOT NULL COMMENT '문의등록자ID',
-  reg_name    CHAR      NULL     COMMENT '문의등록자이름',
-  reg_code    CHAR      NULL     COMMENT '문의등록자코드',
-  reg_tel     CHAR      NULL     COMMENT '문의등록자전화번호',
-  reg_email   CHAR      NULL     COMMENT '문의등록자이메일',
-  reg_company CHAR      NULL     COMMENT '문의등록자회사',
-  reg_date    TIMESTAMP NULL     COMMENT '문의등록일자',
+  reg_id      VARCHAR(100) NOT NULL COMMENT '문의등록자ID',
+  reg_name    VARCHAR(100) NULL     COMMENT '문의등록자이름',
+  reg_code    VARCHAR(100) NULL     COMMENT '문의등록자코드',
+  reg_tel     VARCHAR(100) NULL     COMMENT '문의등록자전화번호',
+  reg_email   VARCHAR(100) NULL     COMMENT '문의등록자이메일',
+  reg_company VARCHAR(100) NULL     COMMENT '문의등록자회사',
+  reg_date    TIMESTAMP    NULL     COMMENT '문의등록일자',
   PRIMARY KEY (reg_id)
 );
 
 CREATE TABLE ec_report_cnt
 (
-  report_cnt int NULL     COMMENT '신고건수',
+  report_cnt INT NULL     DEFAULT 0 COMMENT '신고건수',
   qna_id     INT NOT NULL COMMENT '문의 ID'
 );
 
 CREATE TABLE ec_report_reg
 (
-  report_reg_id      CHAR      NOT NULL COMMENT '문의신고자ID',
-  report_reg_name    CHAR      NULL     COMMENT '문의신고자이름',
-  report_reg_code    CHAR      NULL     COMMENT '문의신고자코드',
-  report_reg_tel     CHAR      NULL     COMMENT '문의신고자전화번호',
-  report_reg_email   CHAR      NULL     COMMENT '문의신고자이메일',
-  report_reg_company CHAR      NULL     COMMENT '문의신고자회사',
-  report_reg_date    TIMESTAMP NULL     COMMENT '문의신고일자',
+  report_reg_id      VARCHAR(100) NOT NULL COMMENT '문의신고자ID',
+  report_reg_name    VARCHAR(100) NULL     COMMENT '문의신고자이름',
+  report_reg_code    VARCHAR(100) NULL     COMMENT '문의신고자코드',
+  report_reg_tel     VARCHAR(100) NULL     COMMENT '문의신고자전화번호',
+  report_reg_email   VARCHAR(100) NULL     COMMENT '문의신고자이메일',
+  report_reg_company VARCHAR(100) NULL     COMMENT '문의신고자회사',
+  report_reg_date    TIMESTAMP    NULL     COMMENT '문의신고일자',
   PRIMARY KEY (report_reg_id)
 );
 
 CREATE TABLE ec_series
 (
-  series_code   CHAR     NOT NULL COMMENT '시리즈코드',
-  series_name   LONGTEXT NULL     COMMENT '시리즈명',
-  company_name  CHAR     NULL     COMMENT '회사명',
-  mv_type       CHAR     NULL     COMMENT 'mv타입',
-  vona_type     CHAR     NULL     COMMENT 'vona타입',
-  series_type   CHAR     NULL     COMMENT 'series타입',
-  category_code CHAR     NOT NULL COMMENT '카테고리코드',
-  brand_code    CHAR     NOT NULL COMMENT '브랜드코드',
+  series_code   VARCHAR(100) NOT NULL COMMENT '시리즈코드',
+  series_name   LONGTEXT     NULL     COMMENT '시리즈명',
+  company_name  VARCHAR(100) NULL     COMMENT '회사명',
+  mv_type       CHAR         NULL     DEFAULT 'N' COMMENT 'mv타입',
+  vona_type     CHAR         NULL     DEFAULT 'N' COMMENT 'vona타입',
+  series_type   VARCHAR(100) NULL     COMMENT 'series타입',
+  category_code VARCHAR(100) NOT NULL COMMENT '카테고리코드',
+  brand_code    VARCHAR(100) NOT NULL COMMENT '브랜드코드',
   PRIMARY KEY (series_code)
 );
 
 CREATE TABLE ec_user
 (
-  sn         INT       NOT NULL COMMENT '일련번호',
-  user_id    CHAR      NOT NULL COMMENT '유저ID',
-  passwd     CHAR      NULL     COMMENT '비밀번호',
-  user_nm    CHAR      NULL     COMMENT '유저이름',
-  division   CHAR      NULL     COMMENT '부서명',
-  status     CHAR      NULL     COMMENT '활성상태',
-  remark     LONGTEXT  NULL     COMMENT '비고',
-  user_type  INT       NULL     COMMENT '사용자종류',
-  notice_yn  CHAR      NULL     COMMENT '알림수신여부',
-  reg_date   TIMESTAMP NULL     COMMENT '등록일자',
-  last_login TIMESTAMP NULL     COMMENT '최종로그인일자',
-  PRIMARY KEY (sn, user_id)
+  sn         INT          NOT NULL COMMENT '일련번호',
+  user_id    VARCHAR(100) NOT NULL COMMENT '유저ID',
+  passwd     VARCHAR(100) NULL     COMMENT '비밀번호',
+  user_nm    VARCHAR(100) NULL     COMMENT '유저이름',
+  division   VARCHAR(100) NULL     COMMENT '부서명',
+  status     CHAR         NULL     DEFAULT 'Y' COMMENT '활성상태',
+  remark     LONGTEXT     NULL     COMMENT '비고',
+  user_type  INT          NULL     COMMENT '사용자종류',
+  notice_yn  CHAR         NULL     COMMENT '알림수신여부',
+  reg_date   TIMESTAMP    NULL     COMMENT '등록일자',
+  last_login TIMESTAMP    NULL     COMMENT '최종로그인일자',
+  PRIMARY KEY (user_id)
 );
 
 CREATE TABLE email_template
@@ -280,8 +261,8 @@ ALTER TABLE ec_qna_alert
     FOREIGN KEY (qna_id)
     REFERENCES ec_qna (qna_id);
 
-ALTER TABLE ec_approvemnt
-  ADD CONSTRAINT FK_ec_qna_TO_ec_approvemnt
+ALTER TABLE ec_approvement
+  ADD CONSTRAINT FK_ec_qna_TO_ec_approvement
     FOREIGN KEY (qna_id)
     REFERENCES ec_qna (qna_id);
 
@@ -290,8 +271,8 @@ ALTER TABLE ec_misumi_comment
     FOREIGN KEY (qna_id)
     REFERENCES ec_qna (qna_id);
 
-ALTER TABLE ec_approvemnt
-  ADD CONSTRAINT FK_ec_user_TO_ec_approvemnt
+ALTER TABLE ec_approvement
+  ADD CONSTRAINT FK_ec_user_TO_ec_approvement
     FOREIGN KEY (user_id)
     REFERENCES ec_user (user_id);
 
@@ -327,7 +308,7 @@ ALTER TABLE ec_qna_report_proc
 
 ALTER TABLE ec_qna_report_proc
   ADD CONSTRAINT FK_ec_user_TO_ec_qna_report_proc
-    FOREIGN KEY (user_id )
+    FOREIGN KEY (user_id)
     REFERENCES ec_user (user_id);
 
 ALTER TABLE ec_series
@@ -351,9 +332,9 @@ ALTER TABLE ec_notice
     REFERENCES ec_user (user_id);
 
 ALTER TABLE ec_approve_auth_key
-  ADD CONSTRAINT FK_ec_approvemnt_TO_ec_approve_auth_key
+  ADD CONSTRAINT FK_ec_approvement_TO_ec_approve_auth_key
     FOREIGN KEY (approve_id)
-    REFERENCES ec_approvemnt (approve_id);
+    REFERENCES ec_approvement (approve_id);
 
 ALTER TABLE ec_group_code
   ADD CONSTRAINT FK_ec_user_TO_ec_group_code
@@ -365,8 +346,8 @@ ALTER TABLE ec_code
     FOREIGN KEY (group_code)
     REFERENCES ec_group_code (group_code);
 
-ALTER TABLE ec_approvemnt
-  ADD CONSTRAINT FK_ec_approvement_type_TO_ec_approvemnt
+ALTER TABLE ec_approvement
+  ADD CONSTRAINT FK_ec_approvement_type_TO_ec_approvement
     FOREIGN KEY (approve_type)
     REFERENCES ec_approvement_type (approve_type);
 
@@ -375,30 +356,20 @@ ALTER TABLE ec_qna_proc
     FOREIGN KEY (proc_type)
     REFERENCES ec_qna_proc_type (proc_type);
 
-ALTER TABLE ec_qna
-  ADD CONSTRAINT FK_ec_contact_TO_ec_qna
-    FOREIGN KEY (contact_id)
-    REFERENCES ec_contact (contact_id);
-
 ALTER TABLE ec_qna_recommend
   ADD CONSTRAINT FK_ec_qna_TO_ec_qna_recommend
     FOREIGN KEY (qna_id)
     REFERENCES ec_qna (qna_id);
 
-ALTER TABLE ec_qna_recommend
-  ADD CONSTRAINT FK_ec_rcmd_reg_TO_ec_qna_recommend
-    FOREIGN KEY (rcmd_reg_id)
-    REFERENCES ec_rcmd_reg (rcmd_reg_id);
-
-ALTER TABLE ec_rcmd_cnt
-  ADD CONSTRAINT FK_ec_rcmd_reg_TO_ec_rcmd_cnt
-    FOREIGN KEY (rcmd_reg_id)
-    REFERENCES ec_rcmd_reg (rcmd_reg_id);
-
 ALTER TABLE ec_qna_report_proc
   ADD CONSTRAINT FK_ec_qna_proc_type_TO_ec_qna_report_proc
     FOREIGN KEY (proc_type)
     REFERENCES ec_qna_proc_type (proc_type);
+
+ALTER TABLE ec_rcmd_cnt
+  ADD CONSTRAINT FK_ec_qna_TO_ec_rcmd_cnt
+    FOREIGN KEY (qna_id)
+    REFERENCES ec_qna (qna_id);
 
 
 

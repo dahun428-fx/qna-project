@@ -3,15 +3,40 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.qna.project.qnaproject.dao.QnaDAO">
     <insert id="createQna" parameterType="ec_qna">
+        <selectKey keyProperty="qnaId" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID() AS qnaId
+		</selectKey>
         INSERT INTO
             ec_qna
         
-        ()
+        ( title, content, part_no, reg_id, series_code, contact_id )
 
         VALUES
 
-        ()
+        ( #{title}, #{content}, #{partNo}, #{regId}, #{seriesCode}, #{contactId} )
 
     </insert>
+    <select id="findById" parameterType="int">
+        SELECT
+            qna_id      as qnaId,
+            title,
+            content,
+            part_no     as partNo,
+            reg_id      as regId,
+            series_code as seriesCode,
+            contact_id  as contactId,
+            isDeleted,
+            deleted_user_id as deletedUserId,
+            deleted_date    as deletedDate,
+            isBlind
+        
+        FROM
+            ec_qna
+        
+        WHERE
+
+            qna_id = #{qnaId}
+
+    </select>
 
 </mapper>

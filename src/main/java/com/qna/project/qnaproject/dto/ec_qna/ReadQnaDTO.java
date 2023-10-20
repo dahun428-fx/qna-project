@@ -1,19 +1,15 @@
-package com.qna.project.qnaproject.model;
+package com.qna.project.qnaproject.dto.ec_qna;
 
 import java.sql.Timestamp;
-
-import org.apache.ibatis.type.Alias;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 @Data
 @ToString
-@Alias(value = "ec_qna")
 @NoArgsConstructor
-public class EcQna {
+public class ReadQnaDTO {
     private int qnaId;
     private String title;
     private String content;

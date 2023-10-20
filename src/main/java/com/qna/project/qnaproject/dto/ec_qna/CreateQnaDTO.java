@@ -1,4 +1,4 @@
-package com.qna.project.qnaproject.dto;
+package com.qna.project.qnaproject.dto.ec_qna;
 
 import java.sql.Timestamp;
 
