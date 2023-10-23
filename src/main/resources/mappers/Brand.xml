@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qna.project.qnaproject.dao.BrandDAO">
+    <insert id="upsertBrand">
+        INSERT INTO
+            
+            ec_brand
+
+        ( brand_code, brand_name )
+
+        VALUES
+
+        ( #{brandCode}, #{brandName} )
+
+        ON DUPLICATE KEY UPDATE
+            
+            brand_name = #{brandName}
+
+    </insert>
+</mapper>

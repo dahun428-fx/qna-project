@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qna.project.qnaproject.dao.SeriesDAO">
+    <insert id="upsertSeries" parameterType="ec_series">
+        <selectKey keyProperty="seriesCode" resultType="string" order="AFTER">
+			SELECT LAST_INSERT_ID() AS seriesCode
+		</selectKey>
+        INSERT INTO
+            ec_series
+
+        ( series_code, series_name, company_name, mv_type, vona_type, series_type, category_code, brand_code )
+
+        VALUES
+
+        ( #{seriesCode}, #{seriesName}, #{companyName}, #{mvType}, #{vonaType}, #{seriesType}, #{categoryCode}, #{brandCode}  )
+
+        ON DUPLICATE KEY UPDATE
+            
+            series_name = #{seriesName},
+            company_name = #{companyName},
+            mv_type = #{mvType},
+            vona_type = #{vonaType},
+            series_type = #{seriesType},
+            category_code = #{categoryCode},
+            brand_code = #{brandCode}
+
+    </insert>
+    <select id="findBySeriesCode" parameterType="string" resultType="ec_series">
+        SELECT
+            series_code as seriesCode,
+            series_name as seriesName,
+            company_name as companyName,
+            mv_type as mvType,
+            vona_type as vonaType,
+            series_type as seriesType,
+            category_code as categoryCode,
+            brand_code as brandCode
+        
+        FROM
+
+            ec_series
+
+        WHERE
+
+            series_code = #{value}
+
+    </select>
+
+</mapper>
