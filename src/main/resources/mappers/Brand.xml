@@ -18,4 +18,19 @@
             brand_name = #{brandName}
 
     </insert>
+    <select id="findByBrandCode" parameterType="string">
+        SELECT
+
+            brand_code as brandCode,
+            brand_name as brandName
+            
+        FROM
+
+            ec_brand
+
+        WHERE
+
+            brand_code = #{value}
+
+    </select>
 </mapper>

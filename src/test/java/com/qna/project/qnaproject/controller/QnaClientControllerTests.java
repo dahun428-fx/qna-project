@@ -11,30 +11,24 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
 import com.qna.project.qnaproject.dto.ec_qna.CreateQnaDTO;
 import com.qna.project.qnaproject.dto.ec_qna.ReadQnaDTO;
 import com.qna.project.qnaproject.service.QnaClientService;
 import com.qna.project.qnaproject.utils.ModelUtil;
-import com.qna.project.qnaproject.utils.MultiValueMapConverter;
 
 @RunWith(SpringRunner.class)
 // @TestPropertySource(locations = "classpath:application.properties")
@@ -46,52 +40,63 @@ public class QnaClientControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    // @Autowired
     @MockBean
     private QnaClientService clientService;
+
+    @Value("classpath:test-dummy-data/create-qna-data.json")
+    private Resource CREATE_QNA_JSON;
+
+    private CreateQnaDTO createQnaDTO = null;
+
+    @Before
+    public void setUp() {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            
+            Map<String, String> map = mapper.readValue(CREATE_QNA_JSON.getFile(), Map.class);
+            createQnaDTO = ModelUtil.map(map, CreateQnaDTO.class);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     @Test
     @DisplayName("Qna Create Test")
     public void createNewQnaTest() throws Exception {
         String url = "/q1/c1/api/qna/create";
 
-        String title = "testTitle";
-        String content = "testContent";
-        String partNo = "partNoTest";
-        String regId = "username12";
-        String seriesCode = "seriesCode__test";
-        int contactId = 1234;
-
         CreateQnaDTO dto 
-            = CreateQnaDTO
-                .builder()
-                .title(title)
-                .content(content)
-                .partNo(partNo)
-                .regId(regId)
-                .seriesCode(seriesCode)
-                .contactId(contactId)
-                .build();
+            = createQnaDTO;
         //request body dto type 과 response body dto type 이 다를때, 일치 여부 ( eqauls ) 명시 필요 
         when(clientService.createQna(dto)).thenReturn(ModelUtil.map(dto, ReadQnaDTO.class));
 
-        
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                             .post(url)
+                            .characterEncoding("UTF-8")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(ModelUtil.toJSON(dto)))
                             .andDo(MockMvcResultHandlers.print())
                             .andExpect(MockMvcResultMatchers.status().isCreated())
                             .andReturn();
+        result.getResponse().setCharacterEncoding("UTF-8");
         ReadQnaDTO responseReadDto = new ObjectMapper().readValue(result.getResponse().getContentAsString(), ReadQnaDTO.class);
-        
         BDDMockito.verify(clientService).createQna(dto);
-        assertEquals(title, responseReadDto.getTitle());
-        assertEquals(content, responseReadDto.getContent());
-        assertEquals(partNo, responseReadDto.getPartNo());
-        assertEquals(regId, responseReadDto.getRegId());
-        assertEquals(seriesCode, responseReadDto.getSeriesCode());
-        assertEquals(contactId, responseReadDto.getContactId());
+
+        assertEquals(dto.getTitle(), responseReadDto.getTitle());
+        assertEquals(dto.getContent(), responseReadDto.getContent());
+        assertEquals(dto.getPartNo(), responseReadDto.getPartNo());
+        assertEquals(dto.getRegId(), responseReadDto.getRegId());
+        assertEquals(dto.getSeriesCode(), responseReadDto.getSeriesCode());
+        assertEquals(dto.getSeriesName(), responseReadDto.getSeriesName());
+        assertEquals(dto.getBrandCode(), responseReadDto.getBrandCode());
+        assertEquals(dto.getBrandName(), responseReadDto.getBrandName());
+        assertEquals(dto.getContactId(), responseReadDto.getContactId());
 
     }
 

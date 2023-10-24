@@ -25,7 +25,7 @@
             reg_id      as regId,
             series_code as seriesCode,
             contact_id  as contactId,
-            isDeleted,
+            isDelete,
             deleted_user_id as deletedUserId,
             deleted_date    as deletedDate,
             isBlind
@@ -36,6 +36,42 @@
         WHERE
 
             qna_id = #{qnaId}
+
+    </select>
+    <select id="findByIdJoinWithSeriesCategoryBrand" parameterType="int">
+        SELECT
+            a.qna_id as qnaId,
+            a.title,
+            a.content,
+            a.part_no as partNo,
+            a.reg_id as regId,
+            b.series_code as seriesCode,
+            b.series_name as seriesName,
+            d.category_code as categoryCode,
+            d.category_name as categoryName,
+            c.brand_code as brandCode,
+            c.brand_name as brandName,
+            a.contact_id as contactId,
+            a.isDelete,
+            a.deleted_user_id as deletedUserId,
+            a.deleted_date as deletedDate,
+            a.isBlind
+        FROM
+            ec_qna a
+		  INNER JOIN 
+            ec_series b
+		  ON 
+            a.series_code = b.series_code
+		  INNER JOIN 
+            ec_brand c
+		  ON 
+            b.brand_code = c.brand_code
+		  INNER JOIN 
+            ec_category d
+		  ON 
+            b.category_code = d.category_code
+        WHERE
+            a.qna_id = #{qna_id}
 
     </select>
 

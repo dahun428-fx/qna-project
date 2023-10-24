@@ -7,4 +7,5 @@ import com.qna.project.qnaproject.model.Category;
 @Mapper
 public interface CategoryDAO {
     void upsertCategory(Category category);
+    Category findByCategoryCode(String categoryCode);
 }

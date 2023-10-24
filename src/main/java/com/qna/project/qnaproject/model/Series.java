@@ -22,4 +22,12 @@ public class Series {
     private String seriesType;
     private String categoryCode;
     private String brandCode;
+
+    public static Series createSeries(String seriesCode, String seriesName, String categoryCode, String brandCode){
+        if(seriesCode.isEmpty() || seriesName.isEmpty() || categoryCode.isEmpty() || brandCode.isEmpty()) {
+            return null;
+        }
+        return new Series(seriesCode, seriesName, "", "", "", "", categoryCode, brandCode);
+    }
+
 }
